@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+   
+    <script defer src="face-api.min.js"></script>
+    <script defer src="face-rec-scripts.js"></script>
+      <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #00796b; /* Changed background color */
+            padding: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 40px;
+        }
+
+        .navbar-title {
+            font-size: 24px;
+            margin-left: 10px;
+        }
+
+        .navbar-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Map and Section Styles */
+        #map {
+            height: 80vh;
+            width: 80vw;
+            margin: 20px auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+           #userRadioButtons, #userProfile {
+            margin: 20px;
+            padding: 15px;
+            background-color: #ebdbe8;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        hr {
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .view-profile-button {
+            padding: 10px 20px;
+            background-color: #00796b;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .view-profile-button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body onload="initMap()">
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-logo">
+            <img src="images/logo_dbkl2.png" alt="MYdbkl Logo">
+            <span class="navbar-title">MYdbkl</span>
+        </div>
+        <div class="navbar-links">
+        </div>
+    </div>
+
+    <h1>Face Recognition - User Profiles</h1>
+
+    <!-- Section to display the list of usernames and corresponding radio buttons -->
+    <div id="userRadioButtons">
+        <h2>Select User</h2>
+        <!-- Radio buttons for usernames will be added here dynamically by JavaScript -->
+    </div>
+
+    <hr>
+
+    <!-- Section to display user profile details -->
+    <div id="userProfile">
+        <!-- User profile details will be added here dynamically by JavaScript -->
+    </div>
+
+    <hr>
+
+    <!-- Canvas for face-api.js to display detected faces -->
+    <canvas id="canvas"></canvas>
