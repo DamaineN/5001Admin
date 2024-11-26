@@ -26,6 +26,8 @@ mongoose.connect(MONGO_URI, {
 const userSchema = new mongoose.Schema({
   name: String,
   icNumber: String,
+  latitude: Number,
+  longitude: Number,
   pic1: String, // Base64 string for Pic1
   pic2: String, // Base64 string for Pic2
   status: { type: String, enum: ['verified', 'notVerified'], default: 'notVerified' }, // Verified status
@@ -34,3 +36,4 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
