@@ -112,3 +112,42 @@ const getSelectedUsername = () => {
     const selectedRadio = document.querySelector('input[name="username"]:checked');
     return selectedRadio ? selectedRadio.value : null;
 };
+
+// Function to get the selected username from radio buttons
+const getSelectedUsername = () => {
+    const selectedRadio = document.querySelector('input[name="username"]:checked');
+    return selectedRadio ? selectedRadio.value : null;
+};
+
+// Function to update the status of the selected user
+const updateStatus = async () => {
+    const username = getSelectedUsername(); // Get selected username from radio buttons
+    const status = document.querySelector('input[name="status"]:checked')?.value;
+
+    // Ensure both username and status are selected
+    if (!username || !status) {
+        alert('Please select a username and a status.');
+        return;
+    }
+
+    try {
+        // Send the updated status to the server
+        const response = await fetch(`/update-status/${username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        // Check if the update was successful
+        if (response.ok) {
+            alert('Status updated successfully.');
+        } else {
+            throw new Error('Failed to update status.');
+        }
+    } catch (error) {
+        console.error('Error updating status:', error);
+        alert('Error updating status. Please try again later.');
+    }
+};
