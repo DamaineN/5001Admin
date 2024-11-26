@@ -57,3 +57,55 @@ app.get('/get-location', async (req, res) => {
   }
 });
 
+// Endpoint to fetch the list of usernames
+app.get('/usernames', async (req, res) => {
+  try {
+    const users = await User.find({}, 'name'); // Fetch only the name field
+    res.json(users.map(user => user.name)); // Return list of usernames
+  } catch (error) {
+    console.error('Error fetching usernames:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Endpoint to fetch a user profile by username
+app.get('/userProfile/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.params.username });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.json(user); // Return the full user profile
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Endpoint to update user status (verified or notVerified)
+app.post('/update-status/:username', async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!['verified', 'notVerified'].includes(status)) {
+      return res.status(400).send('Invalid status');
+    }
+
+    const user = await User.findOneAndUpdate(
+      { name: req.params.username },
+      { status },
+      { new: true } // Return the updated user
+    );
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.json({ message: 'User status updated successfully', status: user.status });
+  } catch (error) {
+    console.error('Error updating user status:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Start the server
+app.listen(3000, () => console.log('Server running on port 3000!'));
