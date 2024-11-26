@@ -13,6 +13,10 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(express.json()); // To handle JSON request bodies
 
+// Middleware to parse JSON
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 // MongoDB connection URI
 const MONGO_URI = 'mongodb+srv://damaine334:Angulimala123@cluster0.vc4zr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
