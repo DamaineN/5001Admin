@@ -1,4 +1,5 @@
-const userRadioButtonsDiv = document.getElementById('userRadioButtons');
+document.addEventListener('DOMContentLoaded', async () => {
+    const userRadioButtonsDiv = document.getElementById('userRadioButtons');
 
     // Fetch the list of usernames from the server
     const response = await fetch('/usernames');
@@ -113,12 +114,6 @@ const getSelectedUsername = () => {
     return selectedRadio ? selectedRadio.value : null;
 };
 
-// Function to get the selected username from radio buttons
-const getSelectedUsername = () => {
-    const selectedRadio = document.querySelector('input[name="username"]:checked');
-    return selectedRadio ? selectedRadio.value : null;
-};
-
 // Function to update the status of the selected user
 const updateStatus = async () => {
     const username = getSelectedUsername(); // Get selected username from radio buttons
@@ -149,5 +144,25 @@ const updateStatus = async () => {
     } catch (error) {
         console.error('Error updating status:', error);
         alert('Error updating status. Please try again later.');
+    }
+};
+
+// Function to get address from latitude and longitude
+const getAddress = async (latitude, longitude) => {
+    const apiKey = 'AIzaSyB04_VuymLMqSOH8tKlIV-wZrCp7Yt_wKE'; // Replace with your Google Maps API key
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(geocodeUrl);
+        const data = await response.json();
+        if (data.status === 'OK' && data.results.length > 0) {
+            const address = data.results[0].formatted_address;
+            document.getElementById('address').textContent = address;
+        } else {
+            document.getElementById('address').textContent = 'Address not found';
+        }
+    } catch (error) {
+        console.error('Error getting address:', error);
+        document.getElementById('address').textContent = 'Error fetching address';
     }
 };
