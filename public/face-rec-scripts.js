@@ -151,3 +151,23 @@ const updateStatus = async () => {
         alert('Error updating status. Please try again later.');
     }
 };
+
+// Function to get address from latitude and longitude
+const getAddress = async (latitude, longitude) => {
+    const apiKey = 'AIzaSyB04_VuymLMqSOH8tKlIV-wZrCp7Yt_wKE'; // Replace with your Google Maps API key
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(geocodeUrl);
+        const data = await response.json();
+        if (data.status === 'OK' && data.results.length > 0) {
+            const address = data.results[0].formatted_address;
+            document.getElementById('address').textContent = address;
+        } else {
+            document.getElementById('address').textContent = 'Address not found';
+        }
+    } catch (error) {
+        console.error('Error getting address:', error);
+        document.getElementById('address').textContent = 'Error fetching address';
+    }
+};
