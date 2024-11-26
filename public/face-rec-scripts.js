@@ -58,3 +58,57 @@ const viewProfile = async (username) => {
     // Convert latitude and longitude to address
     getAddress(userProfile.latitude, userProfile.longitude);
 };
+
+// Function to perform the facial recognition process
+const run = async (pic1, pic2) => {
+    // Load the faceapi models
+    await Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
+    ]);
+
+    // Reference Face for Face to compare
+    const refFace = await faceapi.fetchImage(pic1); // Use pic1 as reference
+    const facetoCheck = await faceapi.fetchImage(pic2); // Use pic2 for comparison
+
+    // We grab the image and hand it to detectAllFaces method
+    let refFaceAIData = await faceapi.detectAllFaces(refFace).withFaceLandmarks().withFaceDescriptors();
+    console.log("refFaceAIData Loaded!");
+    let facestoCheckAIData = await faceapi.detectAllFaces(facetoCheck).withFaceLandmarks().withFaceDescriptors();
+    console.log("facestoCheckAIData Loaded!");
+
+    // Get canvas and set it on top of the image
+    const canvas = document.getElementById('canvas');
+    faceapi.matchDimensions(canvas, facetoCheck);
+
+    // Draw face matcher
+    let faceMatcher = new faceapi.FaceMatcher(refFaceAIData);
+    facestoCheckAIData = faceapi.resizeResults(facestoCheckAIData, facetoCheck);
+
+    // Initialize match status
+    let matchStatus = "Face Doesn't Match! Status: Red!";
+
+    // Loop through all faces in the image to check and compare to reference data
+    facestoCheckAIData.forEach(face => {
+        const { descriptor } = face;
+        let accuracy = faceMatcher.findBestMatch(descriptor);
+
+        if (accuracy._distance <= 0.6) {
+            matchStatus = `Face Matched!`;
+        }
+        else {
+            matchStatus = `Face Doesn't Match!`;
+        }
+    });
+
+    // Display the match status on the webpage
+    const matchStatusElement = document.getElementById('matchStatus');
+    matchStatusElement.textContent = matchStatus;
+};
+
+// Function to get the selected username from radio buttons
+const getSelectedUsername = () => {
+    const selectedRadio = document.querySelector('input[name="username"]:checked');
+    return selectedRadio ? selectedRadio.value : null;
+};
