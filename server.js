@@ -9,6 +9,10 @@ const app = express();
 // Enable CORS for all origins
 app.use(cors());
 
+// Middleware to serve static files
+app.use(express.static('public'));
+app.use(express.json()); // To handle JSON request bodies
+
 // MongoDB connection URI
 const MONGO_URI = 'mongodb+srv://damaine334:Angulimala123@cluster0.vc4zr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
